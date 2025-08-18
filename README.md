@@ -2,8 +2,6 @@
 This repository has coding exercises using sockets in java.
 Each exercise is an independent package inside the project.
 
-
-
-
-https://github.com/user-attachments/assets/815491aa-8732-4ed0-b029-c318544590bb
+Echo Server
+https://github.com/user-attachments/assets/2f0d458d-b1d3-476b-884e-bb0e10c86b41
 
