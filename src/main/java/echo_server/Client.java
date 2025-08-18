@@ -2,8 +2,7 @@ package echo_server;
 
 import java.io.*;
 import java.net.Socket;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class Client {
     private Socket socket;
@@ -31,12 +30,26 @@ public class Client {
     }
 
     public void readMessage(){
-        String msg = null;
+        String msgFromServer = null;
         try {
-            msg = in.readLine();
-            System.out.println(msg);
+            msgFromServer = in.readLine();
+            System.out.println(msgFromServer);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public void chat(){
+        System.out.print("Enter a nick name: ");
+        Scanner scanner = new Scanner(System.in);
+        String userName = scanner.nextLine();
+        while(!socket.isClosed()){
+            System.out.print("Lets go!"+userName+".Type your message: ");
+            String msg = scanner.nextLine();
+            sendMessage(msg);
+            readMessage();
+        }
+    }
+
+
 }
