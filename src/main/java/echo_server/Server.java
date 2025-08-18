@@ -67,4 +67,11 @@ public class Server {
         }
     }
 
+    public static void main(String[] args) throws IOException {
+        int port = 5000;
+        ServerSocket serverSocket = new ServerSocket(port);
+        Server server = new Server(serverSocket);
+        server.startServer();
+    }
+
 }
