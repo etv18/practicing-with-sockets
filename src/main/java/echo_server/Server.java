@@ -15,4 +15,14 @@ public class Server {
     public Server(ServerSocket serverSocket){
         this.serverSocket = serverSocket;
     }
+
+    public void sendMessage(String msg){
+        try {
+            out.write(msg);
+            out.newLine();
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
