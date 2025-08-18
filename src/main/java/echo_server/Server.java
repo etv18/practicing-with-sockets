@@ -16,6 +16,15 @@ public class Server {
         this.serverSocket = serverSocket;
     }
 
+    public String getDateTimeFormatted(){
+
+        LocalDateTime dateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
+        String dateTimeFormatted = dateTime.format(formatter);
+
+        return dateTimeFormatted;
+    }
+
     public void sendMessage(String msg){
         try {
             out.write(msg);
