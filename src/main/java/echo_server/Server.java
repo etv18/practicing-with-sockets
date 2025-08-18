@@ -50,4 +50,21 @@ public class Server {
         return msg;
     }
 
+    public void startServer(){
+        System.out.println("***** SERVER IS UP *****");
+        try {
+            socket = serverSocket.accept();
+            System.out.println("Client connected...");
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+            while(!serverSocket.isClosed()){
+                String msg = readMessage();
+                sendMessage(getDateTimeFormatted()+"- SERVER REPLIED"+msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
