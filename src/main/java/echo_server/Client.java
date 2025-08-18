@@ -44,7 +44,7 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         String userName = scanner.nextLine();
         while(!socket.isClosed()){
-            System.out.print("Lets go!"+userName+".Type your message: ");
+            System.out.print("\nLets go! "+userName+". Type your message: ");
             String msg = scanner.nextLine();
             sendMessage(msg);
             readMessage();

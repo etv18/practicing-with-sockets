@@ -60,7 +60,7 @@ public class Server {
 
             while(!serverSocket.isClosed()){
                 String msg = readMessage();
-                sendMessage(getDateTimeFormatted()+"- SERVER REPLIED"+msg);
+                sendMessage(getDateTimeFormatted()+" SERVER REPLIED: "+msg);
             }
         } catch (Exception e) {
             e.printStackTrace();
