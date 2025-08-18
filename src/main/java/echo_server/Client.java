@@ -47,6 +47,7 @@ public class Client {
             System.out.print("\nLets go! "+userName+". Type your message: ");
             String msg = scanner.nextLine();
             sendMessage(msg);
+            if(msg.contains("/q")) break;
             readMessage();
         }
     }

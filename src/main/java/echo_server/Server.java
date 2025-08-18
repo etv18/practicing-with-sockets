@@ -60,6 +60,7 @@ public class Server {
 
             while(!serverSocket.isClosed()){
                 String msg = readMessage();
+                if(msg.contains("/q")) break;
                 sendMessage(getDateTimeFormatted()+" SERVER REPLIED: "+msg);
             }
         } catch (Exception e) {
