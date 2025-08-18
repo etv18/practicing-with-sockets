@@ -51,5 +51,11 @@ public class Client {
         }
     }
 
-
+    public static void main(String[] args) throws IOException {
+        int port = 5000;
+        String proxy = "localhost";
+        Socket socket = new Socket(proxy, port);
+        Client client = new Client(socket);
+        client.chat();
+    }
 }
