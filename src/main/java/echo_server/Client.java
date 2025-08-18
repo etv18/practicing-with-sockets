@@ -20,5 +20,15 @@ public class Client {
         }
     }
 
+    public void sendMessage(String msg){
+        try{
+            out.write(msg);
+            out.newLine();
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
