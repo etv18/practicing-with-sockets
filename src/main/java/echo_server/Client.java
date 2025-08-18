@@ -30,5 +30,13 @@ public class Client {
         }
     }
 
-
+    public void readMessage(){
+        String msg = null;
+        try {
+            msg = in.readLine();
+            System.out.println(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
