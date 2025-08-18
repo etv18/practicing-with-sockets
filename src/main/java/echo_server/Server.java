@@ -34,4 +34,20 @@ public class Server {
             e.printStackTrace();
         }
     }
+
+
+    public String readMessage(){
+
+        String msg = null;
+
+        try {
+            msg = in.readLine();
+            System.out.println(getDateTimeFormatted()+"- CLIENT MESSAGE: "+msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return msg;
+    }
+
 }
