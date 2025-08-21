@@ -8,6 +8,7 @@ public class Client {
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
+    private String userName;
 
     public Client(Socket socket){
         try {
@@ -30,25 +31,34 @@ public class Client {
     }
 
     public void readMessage(){
-        String msgFromServer = null;
-        try {
-            msgFromServer = in.readLine();
-            System.out.println(msgFromServer);
-        } catch (Exception e) {
-            e.printStackTrace();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String msgFromServer = null;
+                while (socket.isConnected()) {
+                    try {
+                        msgFromServer = in.readLine();
+                        System.out.println("\n"+msgFromServer);
+                        System.out.print("Lets go! "+userName+". Type your message: ");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
+        ).start();
     }
 
     public void chat(){
         System.out.print("Enter a nick name: ");
         Scanner scanner = new Scanner(System.in);
-        String userName = scanner.nextLine();
+        userName = scanner.nextLine();
+        System.out.print("Lets go! "+userName+". Type your message: ");
+
         while(!socket.isClosed()){
-            System.out.print("\nLets go! "+userName+". Type your message: ");
             String msg = scanner.nextLine();
             sendMessage(msg);
             if(msg.contains("/q")) break;
-            readMessage();
         }
     }
 
@@ -57,6 +67,7 @@ public class Client {
         String proxy = "localhost";
         Socket socket = new Socket(proxy, port);
         Client client = new Client(socket);
+        client.readMessage();
         client.chat();
     }
 }
