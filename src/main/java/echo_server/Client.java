@@ -2,11 +2,10 @@ package echo_server;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Scanner;
 
 public class Client {
-    private volatile Socket socket;
+    private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
     private String userName;
@@ -32,28 +31,23 @@ public class Client {
     }
 
     public void readMessage(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String msgFromServer = null;
-                while (!socket.isClosed()) {
-                    try {
-                        msgFromServer = in.readLine();
-                        if(msgFromServer == null) {
-                            System.out.println("Chat closed...");
-                            break;
-                        }
-                        System.out.println("\n"+msgFromServer);
-                        System.out.print("Lets go! "+userName+". Type your message: ");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        closeEverything();
-                        break;
-                    }
+        Thread listeingToMessages = Thread.ofVirtual().start(() -> {
+            String msgFromServer = null;
+            while (!socket.isClosed()) {
+                try {
+                    msgFromServer = in.readLine();
+                    if(msgFromServer == null) {
+                        System.out.println("Chat closed...");
+                        break;}
+                    System.out.println("\n"+msgFromServer);
+                    System.out.print("Lets go! "+userName+". Type your message: ");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    closeEverything();
+                    break;
                 }
             }
-        }
-        ).start();
+        });
     }
 
     public void chat(){
@@ -76,9 +70,11 @@ public class Client {
 
     public void closeEverything(){
         try{
-            if(in != null) in.close();
-            if(out != null) out.close();
-            if(socket != null) socket.close();
+            synchronized (socket){
+                if(in != null) in.close();
+                if(out != null) out.close();
+                if(socket != null) socket.close();
+            }
         }catch (IOException e) {
             throw new RuntimeException(e);
         }
