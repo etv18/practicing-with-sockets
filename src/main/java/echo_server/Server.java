@@ -60,11 +60,24 @@ public class Server {
 
             while(!serverSocket.isClosed()){
                 String msg = readMessage();
-                if(msg.contains("/q")) break;
+                if(msg.contains("/q")){
+                    closeEverything();
+                    break;
+                }
                 sendMessage(getDateTimeFormatted()+" SERVER REPLIED: "+msg);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void closeEverything(){
+        try{
+            if(socket != null) socket.close();
+            if(in != null) in.close();
+            if(out != null) out.close();
+        }catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

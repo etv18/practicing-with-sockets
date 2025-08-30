@@ -2,10 +2,11 @@ package echo_server;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Scanner;
 
 public class Client {
-    private Socket socket;
+    private volatile Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
     private String userName;
@@ -35,13 +36,19 @@ public class Client {
             @Override
             public void run() {
                 String msgFromServer = null;
-                while (socket.isConnected()) {
+                while (!socket.isClosed()) {
                     try {
                         msgFromServer = in.readLine();
+                        if(msgFromServer == null) {
+                            System.out.println("Chat closed...");
+                            break;
+                        }
                         System.out.println("\n"+msgFromServer);
                         System.out.print("Lets go! "+userName+". Type your message: ");
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
+                        closeEverything();
+                        break;
                     }
                 }
             }
@@ -58,7 +65,22 @@ public class Client {
         while(!socket.isClosed()){
             String msg = scanner.nextLine();
             sendMessage(msg);
-            if(msg.contains("/q")) break;
+            if(msg.contains("/q")){
+                closeEverything();
+                break;
+            }
+        }
+
+        scanner.close();
+    }
+
+    public void closeEverything(){
+        try{
+            if(in != null) in.close();
+            if(out != null) out.close();
+            if(socket != null) socket.close();
+        }catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
