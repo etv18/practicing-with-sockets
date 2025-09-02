@@ -55,7 +55,9 @@ public class Client {
             while(socket.isConnected()){
                 try{
                     msg = in.readLine();
-                    System.out.println("\n"+getDateTimeFormatted()+" "+msg);
+                    if(!msg.contains(username)){
+                        System.out.println("\n"+getDateTimeFormatted()+" "+msg);
+                    }
                     System.out.print("Lets go "+username+"! type your message: ");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
