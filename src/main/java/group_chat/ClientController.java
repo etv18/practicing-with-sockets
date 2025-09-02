@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ClientController implements Runnable{
     private Socket client;
@@ -17,8 +18,9 @@ public class ClientController implements Runnable{
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+            username = in.readLine();
             clientControllers.add(this);
-            broadcast("New user");
+            broadcast("<New Member> {"+username+"} has joined the chat !");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -12,23 +12,32 @@ public class Client {
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
+    private volatile String username;
 
-    public Client(Socket socket){
-        try {
-            this.socket = socket;
-            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
     public static void main(String[] args) throws IOException {
         int port = 9001;
         String host = "localhost";
         Socket socket = new Socket(host, port);
-        Client client = new Client(socket);
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter a your name: ");
+        String username = sc.nextLine();
+
+        Client client = new Client(socket, username);
         client.readMessages();
         client.chat();
+    }
+
+    public Client(Socket socket, String username){
+        try {
+            this.username = username;
+            this.socket = socket;
+            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            sendMessage(username);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getDateTimeFormatted(){
@@ -46,7 +55,8 @@ public class Client {
             while(socket.isConnected()){
                 try{
                     msg = in.readLine();
-                    System.out.println(getDateTimeFormatted()+" MESSAGE FROM OTHERS: "+msg);
+                    System.out.println("\n"+getDateTimeFormatted()+" "+msg);
+                    System.out.print("Lets go "+username+"! type your message: ");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -68,9 +78,8 @@ public class Client {
         String msg;
         Scanner scanner = new Scanner(System.in);
         while(socket.isConnected()){
-            System.out.print("Type your message: ");
             msg = scanner.nextLine();
-            sendMessage(msg);
+            sendMessage(username+": "+msg);
         }
     }
 }
